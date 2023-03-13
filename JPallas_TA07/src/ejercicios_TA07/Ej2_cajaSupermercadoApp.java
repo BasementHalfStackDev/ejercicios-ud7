@@ -12,7 +12,7 @@ public class Ej2_cajaSupermercadoApp {
 		// Crear carrito de la compra
 		Hashtable<String, ArrayList<String>> carritoMain = new Hashtable<>();
 
-		// Menu principal
+		// Programa principal con su menu principal
 		int i = 0;
 		Scanner input = new Scanner(System.in);
 
@@ -65,7 +65,7 @@ public class Ej2_cajaSupermercadoApp {
 		// Pone el nombre del producto en mayus
 		producto = producto.toUpperCase();
 
-		// Pide cantidad del producto
+		// Pide cantidad del producto hasta que sea el adecuado
 		String scantidad = "";
 		int cantidad = 0;
 
@@ -80,7 +80,7 @@ public class Ej2_cajaSupermercadoApp {
 			}
 		} while (scantidad.isEmpty() || cantidad <= 0);
 
-		// Pide el precio del producto y calcula el iva y total
+		// Pide el precio del producto, comprueba que es valido y calcula el iva y total
 		String sprecio = "";
 		double precio = 0;
 		double precioiva = 0;
@@ -99,11 +99,11 @@ public class Ej2_cajaSupermercadoApp {
 			total = precioiva * cantidad;
 		} while (sprecio.isEmpty() || precio <= 0);
 
-		// Crea lista
+		// Crea ArrayList de Strings
 
 		ArrayList<String> listaValores = new ArrayList<>();
 
-		// Añade producto al carrito
+		// Convierte todo a string, y lo agrega a la lista
 
 		String sprecioiva = String.valueOf(precioiva);
 		String stotal = String.valueOf(total);
@@ -113,6 +113,8 @@ public class Ej2_cajaSupermercadoApp {
 		listaValores.add("21%");
 		listaValores.add(sprecioiva);
 		listaValores.add(stotal);
+
+		// Agrega al carrito el producto junto sus datos
 		carrito.put(producto, listaValores);
 
 		System.out.println();
@@ -125,35 +127,42 @@ public class Ej2_cajaSupermercadoApp {
 
 	public static void verCarrito(Hashtable<String, ArrayList<String>> carrito) {
 
+		// Muestra mensaje de carrito vacio si no hay nada y termina la funcion si es
+		// positivo
 		if (carrito.isEmpty()) {
 			System.out.println("La cesta de la compra esta vacia");
 			System.out.println();
 			return;
 		}
 
+		// Si hay contenido, pone el titulo de la tabla a mostrar
 		System.out.println("Producto | Cantidad | Precio | IVA | Precio con IVA | Total");
 		System.out.println();
 
+		// Inicializa variable para calcular el total a pagar
 		double totalfinal = 0;
 
+		// Itera por el diccionario, y escribe todo los valores de cada producto
 		for (String producto : carrito.keySet()) {
 			ArrayList<String> linea = carrito.get(producto);
 
+			// Va agregando al contador total, el total a pagar por cada producto
 			totalfinal += Double.parseDouble(linea.get(4));
 
 			System.out.println(producto + " | " + linea.get(0) + " | " + linea.get(1) + " | " + linea.get(2) + " | "
 					+ linea.get(3) + " | " + linea.get(4));
 		}
 
+		// Muestra el total a pagar por todos los productos con el IVA
 		System.out.println();
 		System.out.println("El total a pagar es de: " + totalfinal);
 		System.out.println();
 	}
 
-	// Pagar productos
-
+	// Funcion para pagar los productos
 	public static Hashtable<String, ArrayList<String>> pagarProductos(Hashtable<String, ArrayList<String>> carrito) {
 
+		// Calcula el total a pagar segun lo que hay en el carrito
 		double totalfinal = 0;
 
 		for (String producto : carrito.keySet()) {
@@ -161,11 +170,16 @@ public class Ej2_cajaSupermercadoApp {
 			totalfinal += Double.parseDouble(linea.get(4));
 		}
 
+		// Muestra el total a pagar
 		System.out.println("El total a pagar es de " + totalfinal);
+
+		// Creado input en formato US para usar '.' para separar decimales de forma
+		// consistente en todo el programa
 		Scanner input = new Scanner(System.in).useLocale(Locale.US);
-		
+
 		double pago = 0;
-		
+
+		// Comprueba que el pago sea mayor a la cantidad total a pagar
 		while (pago < totalfinal) {
 			System.out.print("Inserte la cantidad a pagar: ");
 			pago = input.nextDouble();
@@ -173,17 +187,20 @@ public class Ej2_cajaSupermercadoApp {
 				System.out.println("Error, su saldo es inferior al total a pagar.");
 			}
 		}
-		
+
+		// Si es mayor, calcula y muestra el cambio
 		if (pago > totalfinal) {
 			double cambio = pago - totalfinal;
 			System.out.println("Su cambio es de " + cambio);
 		}
-		
+
+		// Una vez efectuada la compra, despide al usuario y borra el carrito
 		System.out.println("Gracias por confiar en nosotros! Hasta la proxima!");
 		System.out.println();
-		
+
 		carrito.clear();
 
+		// Devuelve el carrito ahora vacio
 		return carrito;
 	}
 }
