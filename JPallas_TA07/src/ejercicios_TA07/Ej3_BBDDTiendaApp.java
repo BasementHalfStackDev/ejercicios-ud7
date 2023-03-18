@@ -146,7 +146,7 @@ public class Ej3_BBDDTiendaApp {
 
 			// Acciones a realizar segun la opcion seleccionada
 			if (i == 1) {
-				System.out.print("Introduce el nombre del producto a buscar: ");
+				System.out.print("Introduce el nombre del producto a agregar: ");
 				String producto = input.next();
 				System.out.print("Introduce el precio: ");
 				double precio = input.nextDouble();
@@ -156,7 +156,7 @@ public class Ej3_BBDDTiendaApp {
 			} else if (i == 2) {
 				muestraTabla(controlStocks);
 			} else if (i == 3) {
-				System.out.print("Introduce el nombre del producto: ");
+				System.out.print("Introduce el nombre del producto a buscar: ");
 				String producto = input.next();
 				buscadorProducto(controlStocks, producto);
 			} else if (i == 4) {
