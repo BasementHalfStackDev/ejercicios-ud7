@@ -12,10 +12,11 @@ public class Ej2_cajaSupermercadoApp {
 		// Crear carrito de la compra
 		Hashtable<String, ArrayList<String>> carritoMain = new Hashtable<>();
 
-		// Programa principal con su menu principal
+		// Creado scanner formato US para usar '.' para separar doubles sin que de error
 		int i = 0;
-		Scanner input = new Scanner(System.in);
+		Scanner input = new Scanner(System.in).useLocale(Locale.US);
 
+		// Programa principal con su menu principal
 		while (i != 4) {
 			System.out.println("Selecciona que quieres hacer.");
 			System.out.println();
@@ -29,11 +30,11 @@ public class Ej2_cajaSupermercadoApp {
 			System.out.println();
 
 			if (i == 1) {
-				agregarProducto(carritoMain);
+				agregarProducto(carritoMain, input);
 			} else if (i == 2) {
 				verCarrito(carritoMain);
 			} else if (i == 3) {
-				pagarProductos(carritoMain);
+				pagarProductos(carritoMain, input);
 			} else if (i == 4) {
 				break;
 			} else {
@@ -53,10 +54,8 @@ public class Ej2_cajaSupermercadoApp {
 
 	// Funcion para agregar producto
 
-	public static Hashtable<String, ArrayList<String>> agregarProducto(Hashtable<String, ArrayList<String>> carrito) {
-
-		// Crear scanner
-		Scanner input = new Scanner(System.in);
+	public static Hashtable<String, ArrayList<String>> agregarProducto(Hashtable<String, ArrayList<String>> carrito,
+			Scanner input) {
 
 		// Pregunta al usuario el producto, cantidad y precio
 		System.out.print("Escribe el nombre del producto a agregar: ");
@@ -160,7 +159,8 @@ public class Ej2_cajaSupermercadoApp {
 	}
 
 	// Funcion para pagar los productos
-	public static Hashtable<String, ArrayList<String>> pagarProductos(Hashtable<String, ArrayList<String>> carrito) {
+	public static Hashtable<String, ArrayList<String>> pagarProductos(Hashtable<String, ArrayList<String>> carrito,
+			Scanner input) {
 
 		// Calcula el total a pagar segun lo que hay en el carrito
 		double totalfinal = 0;
@@ -172,10 +172,6 @@ public class Ej2_cajaSupermercadoApp {
 
 		// Muestra el total a pagar
 		System.out.println("El total a pagar es de " + totalfinal);
-
-		// Creado input en formato US para usar '.' para separar decimales de forma
-		// consistente en todo el programa
-		Scanner input = new Scanner(System.in).useLocale(Locale.US);
 
 		double pago = 0;
 
