@@ -241,7 +241,7 @@ public class Ej4_TiendaFullApp {
 				String passw = input.next();
 				System.out.println("Autenticando . . .");
 				try {
-					Thread.sleep(3000); // 3 seconds
+					Thread.sleep(3000); // pausa 3 segundos para simular por el ejercicio
 				} catch (InterruptedException e) {
 				}
 				menuEmpleado(controlStocks, input);
