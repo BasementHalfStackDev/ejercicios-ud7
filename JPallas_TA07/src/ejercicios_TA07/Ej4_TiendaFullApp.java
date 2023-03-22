@@ -41,7 +41,128 @@ public class Ej4_TiendaFullApp {
 		public static final double IVA = 21;
 	}
 
-	// Funcion que agrega valores a la tabla sin comprobar
+	// Menu principal con menus de empleado y cliente
+	public static void menuPrincipal(Hashtable<String, Hashtable<Double, Integer>> controlStocks, Scanner input) {
+		// Seleccionador de opcion
+		int i = 0;
+
+		// Sigue corriendo hasta que se marca la opcion de salida (4)
+		while (i != 3) {
+			System.out.println();
+			System.out.println("Bienvenido! Eres empleado o cliente?");
+			System.out.println("1. Cliente");
+			System.out.println("2. Empleado");
+			System.out.println("3. Salir");
+			System.out.println();
+			System.out.print("Tu seleccion: ");
+			i = input.nextInt();
+			System.out.println();
+
+			if (i == 1) {
+				menuCliente(input, controlStocks);
+			} else if (i == 2) {
+				System.out.print("Introduce tu contraseña: ");
+				String passw = input.next();
+				System.out.println("Autenticando . . .");
+				try {
+					Thread.sleep(3000); // pausa 3 segundos para simular por el ejercicio
+				} catch (InterruptedException e) {
+				}
+				menuEmpleado(controlStocks, input);
+			} else if (i == 3) {
+				System.out.println("Gracias por tu visita!");
+				return;
+			}
+
+		}
+	}
+
+	// Menu para empleados donde pueden manipular, ver y buscar el stock de
+	// productos
+	public static void menuEmpleado(Hashtable<String, Hashtable<Double, Integer>> controlStocks, Scanner input) {
+		// Seleccionador de opcion
+		int i = 0;
+
+		// Sigue corriendo hasta que se marca la opcion de salida (4)
+		while (i != 4) {
+			System.out.println();
+			System.out.println("Selecciona que quieres hacer.");
+			System.out.println();
+			System.out.println("1. Agregar nuevo producto");
+			System.out.println("2. Ver stock de productos");
+			System.out.println("3. Buscar producto");
+			System.out.println("4. Atras");
+			System.out.println();
+			System.out.print("Tu seleccion: ");
+			i = input.nextInt();
+			System.out.println();
+
+			// Acciones a realizar segun la opcion seleccionada
+			if (i == 1) {
+				System.out.print("Introduce el nombre del producto a agregar: ");
+				String producto = input.next();
+				System.out.print("Introduce el precio: ");
+				double precio = input.nextDouble();
+				System.out.print("Y el stock: ");
+				int stock = input.nextInt();
+				agregaProducto(controlStocks, producto, precio, stock);
+			} else if (i == 2) {
+				muestraStock(controlStocks);
+			} else if (i == 3) {
+				System.out.print("Introduce el nombre del producto a buscar: ");
+				String producto = input.next();
+				buscadorProducto(controlStocks, producto);
+			} else if (i == 4) {
+				return;
+			} else {
+				System.out.println("ERROR, COMANDO NO RECONOCIDO");
+				System.out.println();
+			}
+		}
+	}
+
+	// Menu del cliente donde puede realizar compras a la tienda
+	public static void menuCliente(Scanner input, Hashtable<String, Hashtable<Double, Integer>> controlStocks) {
+		// Crear carrito de la compra
+		Hashtable<String, ArrayList<String>> carritoMain = new Hashtable<>();
+
+		// Programa principal con su menu principal
+		int i = 0;
+
+		while (i != 5) {
+			System.out.println("Selecciona que quieres hacer.");
+			System.out.println();
+			System.out.println("1. Introducir articulo al carrito");
+			System.out.println("2. Ver articulos en el carrito");
+			System.out.println("3. Pagar los articulos");
+			System.out.println("4. Ver productos disponibles");
+			System.out.println("5. Salir");
+			System.out.println();
+			System.out.print("Tu seleccion: ");
+			i = input.nextInt();
+			System.out.println();
+
+			if (i == 1) {
+				agregarProducto(controlStocks, carritoMain, input);
+			} else if (i == 2) {
+				verCarrito(carritoMain);
+			} else if (i == 3) {
+				pagarProductos(carritoMain, input);
+			} else if (i == 4) {
+				muestraStock(controlStocks);
+			} else if (i == 5) {
+				return;
+			} else {
+				System.out.println("ERROR, COMANDO NO RECONOCIDO");
+				System.out.println();
+			}
+
+		}
+	}
+
+	// FUNCIONES
+	// FUNCIONES PARA EL CONTROL DE STOCK
+	// Funcion que agrega valores a la tabla de stocks sin comprobar
 	public static Hashtable<String, Hashtable<Double, Integer>> rellenaTabla(
 			Hashtable<String, Hashtable<Double, Integer>> tabla, String producto, double precio, int stock) {
 		Hashtable<Double, Integer> tablaInterior = new Hashtable<>();
@@ -94,6 +215,7 @@ public class Ej4_TiendaFullApp {
 		}
 	}
 
+	// Muestra todos los productos y su stock en la base de datos
 	public static void muestraStock(Hashtable<String, Hashtable<Double, Integer>> tabla) {
 		System.out.println("PRODUCTO | PRECIO | STOCK DISPONIBLE");
 		tabla.forEach((valor, precio) -> {
@@ -137,122 +259,8 @@ public class Ej4_TiendaFullApp {
 
 	}
 
-	// Programa principal con su menu
-	public static void menuEmpleado(Hashtable<String, Hashtable<Double, Integer>> controlStocks, Scanner input) {
-		// Seleccionador de opcion
-		int i = 0;
-
-		// Sigue corriendo hasta que se marca la opcion de salida (4)
-		while (i != 4) {
-			System.out.println();
-			System.out.println("Selecciona que quieres hacer.");
-			System.out.println();
-			System.out.println("1. Agregar nuevo producto");
-			System.out.println("2. Ver stock de productos");
-			System.out.println("3. Buscar producto");
-			System.out.println("4. Atras");
-			System.out.println();
-			System.out.print("Tu seleccion: ");
-			i = input.nextInt();
-			System.out.println();
-
-			// Acciones a realizar segun la opcion seleccionada
-			if (i == 1) {
-				System.out.print("Introduce el nombre del producto a agregar: ");
-				String producto = input.next();
-				System.out.print("Introduce el precio: ");
-				double precio = input.nextDouble();
-				System.out.print("Y el stock: ");
-				int stock = input.nextInt();
-				agregaProducto(controlStocks, producto, precio, stock);
-			} else if (i == 2) {
-				muestraStock(controlStocks);
-			} else if (i == 3) {
-				System.out.print("Introduce el nombre del producto a buscar: ");
-				String producto = input.next();
-				buscadorProducto(controlStocks, producto);
-			} else if (i == 4) {
-				menuPrincipal(controlStocks, input);
-			} else {
-				System.out.println("ERROR, COMANDO NO RECONOCIDO");
-				System.out.println();
-			}
-		}
-	}
-
-	public static void menuCliente(Scanner input, Hashtable<String, Hashtable<Double, Integer>> controlStocks) {
-		// Crear carrito de la compra
-		Hashtable<String, ArrayList<String>> carritoMain = new Hashtable<>();
-
-		// Programa principal con su menu principal
-		int i = 0;
-
-		while (i != 5) {
-			System.out.println("Selecciona que quieres hacer.");
-			System.out.println();
-			System.out.println("1. Introducir articulo al carrito");
-			System.out.println("2. Ver articulos en el carrito");
-			System.out.println("3. Pagar los articulos");
-			System.out.println("4. Ver productos disponibles");
-			System.out.println("5. Salir");
-			System.out.println();
-			System.out.print("Tu seleccion: ");
-			i = input.nextInt();
-			System.out.println();
-
-			if (i == 1) {
-				agregarProducto(carritoMain, input);
-			} else if (i == 2) {
-				verCarrito(carritoMain);
-			} else if (i == 3) {
-				pagarProductos(carritoMain, input);
-			} else if (i == 4) {
-				muestraStock(controlStocks);
-			} else if (i == 5) {
-				menuPrincipal(controlStocks, input);
-			} else {
-				System.out.println("ERROR, COMANDO NO RECONOCIDO");
-				System.out.println();
-			}
-
-		}
-	}
-
-	public static void menuPrincipal(Hashtable<String, Hashtable<Double, Integer>> controlStocks, Scanner input) {
-		// Seleccionador de opcion
-		int i = 0;
-
-		// Sigue corriendo hasta que se marca la opcion de salida (4)
-		while (i != 3) {
-			System.out.println();
-			System.out.println("Bienvenido! Eres empleado o cliente?");
-			System.out.println("1. Cliente");
-			System.out.println("2. Empleado");
-			System.out.println("3. Salir");
-			System.out.println();
-			System.out.print("Tu seleccion: ");
-			i = input.nextInt();
-			System.out.println();
-
-			if (i == 1) {
-				menuCliente(input, controlStocks);
-			} else if (i == 2) {
-				System.out.print("Introduce tu contraseña: ");
-				String passw = input.next();
-				System.out.println("Autenticando . . .");
-				try {
-					Thread.sleep(3000); // pausa 3 segundos para simular por el ejercicio
-				} catch (InterruptedException e) {
-				}
-				menuEmpleado(controlStocks, input);
-			} else if (i == 3) {
-				System.out.println("Gracias por tu visita!");
-				return;
-			}
-
-		}
-	}
-
+	// FUNCIONES PARA CLIENTE
+	// Funcion que muestra el contenido del carrito
 	public static void verCarrito(Hashtable<String, ArrayList<String>> carrito) {
 
 		// Muestra mensaje de carrito vacio si no hay nada y termina la funcion si es
@@ -287,62 +295,78 @@ public class Ej4_TiendaFullApp {
 		System.out.println();
 	}
 
-	// Funcion para agregar producto
-	public static Hashtable<String, ArrayList<String>> agregarProducto(Hashtable<String, ArrayList<String>> carrito,
+	// Funcion para agregar producto al carrito segun el stock
+	public static Hashtable<String, ArrayList<String>> agregarProducto(
+			Hashtable<String, Hashtable<Double, Integer>> controlStocks, Hashtable<String, ArrayList<String>> carrito,
 			Scanner input) {
 
-		// Pregunta al usuario el producto, cantidad y precio
-		System.out.print("Escribe el nombre del producto a agregar: ");
-		String producto = input.next();
+		// Pregunta al usuario el producto y comprueba que esté en la base de datos
+		boolean existeProducto = false;
+		String producto = "";
+		do {
+			// Pide el producto
+			System.out.print("Escribe el nombre del producto a agregar: ");
+			producto = input.next();
+			// Pone el nombre del producto en mayus
+			producto = producto.toUpperCase();
 
-		// Pone el nombre del producto en mayus
-		producto = producto.toUpperCase();
+			// Comprueba que existe en la base de datos
+			for (String key : controlStocks.keySet()) {
+				if (key.equals(producto)) {
+					System.out.println("Producto encontrado.");
+					existeProducto = true;
+				}
+			}
+			// Si no existe, muestra el stock de productos
+			if (existeProducto == false) {
+				System.out.println("No se encuentra este producto en la base de datos.");
+				System.out.println("Productos disponibles:");
+				System.out.println();
+				muestraStock(controlStocks);
+				System.out.println();
+			}
+		} while (existeProducto == false);
 
-		// Pide cantidad del producto hasta que sea el adecuado
-		String scantidad = "";
+		// Coge el precio del producto y comprueba que la cantidad introducida no sea
+		// superior al inventario actual
+		double precioProducto = controlStocks.get(producto).keySet().iterator().next();
+		boolean cantidadValida = false;
 		int cantidad = 0;
-
+		// Comprueba que la cantidad sea correcta y haya stock suficiente en el almacen
 		do {
-			System.out.print("Cantidad del producto: ");
-			scantidad = input.next();
-			cantidad = Integer.parseInt(scantidad);
-			if (scantidad.isEmpty() || cantidad <= 0) {
+			System.out.print("Introduce la cantidad: ");
+			cantidad = input.nextInt();
+			int stockDisponible = controlStocks.get(producto).get(precioProducto);
+			if (cantidad > stockDisponible) {
 				System.out.println();
-				System.out.println("Error, la cantidad introducida no es correcta");
+				System.out.println("No hay stock suficiente de este produco. La cantidad en el almacen es de: "
+						+ stockDisponible + " unidades.");
 				System.out.println();
+			} else if (cantidad <= stockDisponible) { // Si es correcto, actualiza el stock de productos
+				cantidadValida = true; 				  // restando las unidades agregadas al carrito
+				System.out.println("Hecho!");
+				int stockRestante = stockDisponible - cantidad;
+				Hashtable<Double, Integer> tablaRestante = new Hashtable<>();
+				tablaRestante.put(precioProducto, stockRestante);
+				controlStocks.put(producto, tablaRestante);
 			}
-		} while (scantidad.isEmpty() || cantidad <= 0);
+		} while (cantidadValida == false || cantidad <= 0);
 
-		// Pide el precio del producto, comprueba que es valido y calcula el iva y total
-		String sprecio = "";
-		double precio = 0;
-		double precioiva = 0;
-		double total = 0;
-
-		do {
-			System.out.print("Precio del producto: ");
-			sprecio = input.next();
-			precio = Double.parseDouble(sprecio);
-			if (sprecio.isEmpty() || precio <= 0) {
-				System.out.println();
-				System.out.println("Error, el precio introducido no es correcto");
-				System.out.println();
-			}
-			precioiva = precio + (precio * Globales.IVA / 100);
-			total = precioiva * cantidad;
-		} while (sprecio.isEmpty() || precio <= 0);
+		// Paso variables a String para el arrayList y calculo el precio con iva + total
+		String sPrecio = String.valueOf(precioProducto);
+		String sCantidad = String.valueOf(cantidad);
+		double precioiva = precioProducto + (precioProducto * Globales.IVA / 100);
+		double total = precioiva * cantidad;
+		String sprecioiva = String.valueOf(precioiva);
+		String stotal = String.valueOf(total);
 
 		// Crea ArrayList de Strings
 
 		ArrayList<String> listaValores = new ArrayList<>();
 
-		// Convierte todo a string, y lo agrega a la lista
-
-		String sprecioiva = String.valueOf(precioiva);
-		String stotal = String.valueOf(total);
-
-		listaValores.add(scantidad);
-		listaValores.add(sprecio);
+		// Pone todos los valores del producto en formato string
+		listaValores.add(sCantidad);
+		listaValores.add(sPrecio);
 		listaValores.add("21%");
 		listaValores.add(sprecioiva);
 		listaValores.add(stotal);
